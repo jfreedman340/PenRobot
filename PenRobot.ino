@@ -1,26 +1,26 @@
 // Define stepper motor connections and steps per revolution:
-#define dirPin 2
-#define stepPin 3
+#define dirX 2
+#define stepX 3
 
-#define dirPin2 4
-#define stepPin2 5
+#define dirY 4
+#define stepY 5
 
 #define stepsPerRevolution 1600
 
 void setup() {
   // Declare pins as output:
-  pinMode(stepPin, OUTPUT);
-  pinMode(stepPin2, OUTPUT);
-  pinMode(dirPin, OUTPUT);
-  pinMode(dirPin2, OUTPUT);
+  pinMode(stepX, OUTPUT);
+  pinMode(stepY, OUTPUT);
+  pinMode(dirX, OUTPUT);
+  pinMode(dirY, OUTPUT);
 }
 
-void xPositive (uint8_t function_dirPin) {
+void axisMove (uint8_t function_dirPin, uint8_t value, int stepPin, int steps) {
   // Set the spinning direction counter-clockwise:
-  digitalWrite(function_dirPin, LOW);
+  digitalWrite(function_dirPin, value);
 
   // Spin the stepper motor 1 revolution quickly:
-  for (int i = 0; i < stepsPerRevolution * 20; i++) {
+  for (int i = 0; i < steps; i++) {
     // These four lines result in 1 step:
     digitalWrite(stepPin, HIGH);
     delayMicroseconds(200);
@@ -28,85 +28,56 @@ void xPositive (uint8_t function_dirPin) {
     delayMicroseconds(200);
   }
 }
-
-void xNegative (uint8_t function_dirPin) {
-  // Set the spinning direction counter-clockwise:
-  digitalWrite(function_dirPin, HIGH);
-
-  // Spin the stepper motor 1 revolution quickly:
-  for (int i = 0; i < stepsPerRevolution * 20; i++) {
-    // These four lines result in 1 step:
-    digitalWrite(stepPin, HIGH);
-    delayMicroseconds(200);
-    digitalWrite(stepPin, LOW);
-    delayMicroseconds(200);
-  }
-}
-
-void yPositive (uint8_t function_dirPin) {
-  // Set the spinning direction counter-clockwise:
-  digitalWrite(function_dirPin, LOW);
-
-  // Spin the stepper motor 1 revolution quickly:
-  for (int i = 0; i < 800; i++) {
-    // These four lines result in 1 step:
-    digitalWrite(stepPin2, HIGH);
-    delayMicroseconds(200);
-    digitalWrite(stepPin2, LOW);
-    delayMicroseconds(200);
-  }
-}
-
-void yNegative (uint8_t function_dirPin) {
-  // Set the spinning direction counter-clockwise:
-  digitalWrite(function_dirPin, HIGH);
-
-  // Spin the stepper motor 1 revolution quickly:
-  for (int i = 0; i < 2400; i++) {
-    // These four lines result in 1 step:
-    digitalWrite(stepPin2, HIGH);
-    delayMicroseconds(200);
-    digitalWrite(stepPin2, LOW);
-    delayMicroseconds(200);
-  }
-}
-
 
 
 
 void loop() {
 
-  // Make a pass to the right by 40 stepsPerRevolution
-  xPositive(dirPin);
-  xPositive(dirPin);
+  // Make a pass to the right by 20 stepsPerRevolution
+  axisMove(dirX, LOW, stepX, stepsPerRevolution * 20);
 
 
   // Move blade forward
-  yPositive(dirPin2);
+  axisMove(dirY, LOW, stepY, stepsPerRevolution/2);
   
-  // Make a pass to the left by 40 stepsPerRevolution
-  xNegative(dirPin);
-  xNegative(dirPin);
+
+  // Make a pass to the left by 20 stepsPerRevolution
+  axisMove(dirX, HIGH, stepX, stepsPerRevolution * 20);
 
 
   // Move blade forward second time
-  yPositive(dirPin2);
+  axisMove(dirY, LOW, stepY, stepsPerRevolution/2);
 
 
-  // Make a pass to the right by 40 stepsPerRevolution
-  xPositive(dirPin);
-  xPositive(dirPin);
+  // Make a pass to the right by 20 stepsPerRevolution
+  axisMove(dirX, LOW, stepX, stepsPerRevolution * 20);
 
 
   // Move blade forward third time
-  yPositive(dirPin2);
+  axisMove(dirY, LOW, stepY, stepsPerRevolution/2);
 
 
-  // Make a pass to the left by 40 stepsPerRevolution
-  xNegative(dirPin);
-  xNegative(dirPin);
+  // Make a pass to the left by 20 stepsPerRevolution
+  axisMove(dirX, HIGH, stepX, stepsPerRevolution * 20);
+
+
+  // Move blade forward fourth time
+  axisMove(dirY, LOW, stepY, stepsPerRevolution/2);
+
+
+  // Make a pass to the right by 20 stepsPerRevolution
+  axisMove(dirX, LOW, stepX, stepsPerRevolution * 20);
+
+
+  // Move blade forward fifth time
+  axisMove(dirY, LOW, stepY, stepsPerRevolution/2);
   
+
+  // Make a pass to the left by 20 stepsPerRevolution
+  axisMove(dirX, HIGH, stepX, stepsPerRevolution * 20);
   
+
   // Move blade back to starting position
-  yNegative(dirPin2);
+  axisMove(dirY, HIGH, stepY, 4000);
+
 }
