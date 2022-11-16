@@ -30,28 +30,27 @@ void axisMove (uint8_t function_dirPin, uint8_t value, int stepPin, int steps) {
 }
 
 
-void xMove (uint8_t value) {axisMove(dirX, value, stepX, stepsPerRev * 10);}
+void xMove (uint8_t value) {axisMove(dirX, value, stepX, stepsPerRev * 20);}
 void yMove (uint8_t value, int steps) {axisMove(dirY, value, stepY, steps);}
+void makePass (uint8_t value) {xMove(value), yMove(LOW, stepsPerRev);}
 
 void sixPasses () {
-  //Pass 1
-  xMove(LOW), yMove(LOW, stepsPerRev),
-  //Pass 2
-  xMove(HIGH), yMove(LOW, stepsPerRev),
-  //Pass 3
-  xMove(LOW), yMove(LOW, stepsPerRev),
-  //Pass 4
-  xMove(HIGH), yMove(LOW, stepsPerRev),
-  //Pass 5
-  xMove(LOW), yMove(LOW, stepsPerRev),
-  //Pass 6
+  //Pass 1, to the right.
+  makePass(LOW),
+  //Pass 2, to the left.
+  makePass(HIGH),
+  //Pass 3, right.
+  makePass(LOW),
+  //Pass 4, left.
+  makePass(HIGH),
+  //Pass 5, right.
+  makePass(LOW),
+  //Pass 6, back to the starting position.
   xMove(HIGH), yMove(HIGH, stepsPerRev * 5);
   }
 
 
 void loop() {
-
   // Make a six passes
   sixPasses();
-
 }
